@@ -1,7 +1,19 @@
 package jm.task.core.jdbc;
 
+import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
+
 public class Main {
     public static void main(String[] args) {
-        // реализуйте алгоритм здесь
+        UserDaoJDBCImpl userDaoJDBC = new UserDaoJDBCImpl();
+
+        userDaoJDBC.createUsersTable();
+        userDaoJDBC.saveUser("Dmitryi", "Donskoi", ((byte) 29));
+        userDaoJDBC.saveUser("Sergyi", "Radonezhskyi", ((byte) 66));
+        userDaoJDBC.saveUser("Alexander", "Peresvet", ((byte) 30));
+        userDaoJDBC.saveUser("Andrei", "Oslyabya", ((byte) 40));
+
+        System.out.println(userDaoJDBC.getAllUsers().toString());
+        //userDaoJDBC.cleanUsersTable();
+        //userDaoJDBC.dropUsersTable();
     }
 }
