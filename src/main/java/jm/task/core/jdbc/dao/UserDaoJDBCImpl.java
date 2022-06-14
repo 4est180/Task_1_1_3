@@ -11,7 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS Users(id long, name varchar(45), lastName varchar(45), age tinyint)";
+    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS Users(`id` INT NOT NULL AUTO_INCREMENT,\n" +
+            "  `name` VARCHAR(45) NOT NULL,\n" +
+            "  `lastName` VARCHAR(45) NOT NULL,\n" +
+            "  `age` INT(3) NOT NULL,\n" +
+            "  PRIMARY KEY (`id`))";
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS Users";
     private static final String SAVE_USER = "INSERT INTO Users VALUES(?,?,?,?)";
     private static final String REMOVE_BY_ID = "DELETE FROM Users WHERE id=?";
@@ -41,7 +45,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         User user = new User(name, lastName, age);
         try (PreparedStatement preparedStatement = Util.getConnection().prepareStatement(SAVE_USER)) {
-            user.setId(((long) 1));
+            //user.setId(((long) 1));
             preparedStatement.setLong(1, user.getId());
             preparedStatement.setString(2, user.getName());
             preparedStatement.setString(3, user.getLastName());
@@ -63,25 +67,26 @@ public class UserDaoJDBCImpl implements UserDao {
         }
 
     public List<User> getAllUsers() {
-            List<User> userList = new ArrayList<>();
+        List<User> userList = new ArrayList<>();
 
-            try (Statement statement = Util.getConnection().createStatement()) {
-                ResultSet resultSet = statement.executeQuery(GET_ALL);
+        try (Statement statement = Util.getConnection().createStatement()) {
+            ResultSet resultSet = statement.executeQuery(GET_ALL);
 
-                while (resultSet.next()) {
-                    User user = new User();
+            while (resultSet.next()) {
+                User user = new User();
 
-                    user.setId(resultSet.getLong("id"));
-                    user.setName(resultSet.getString("name"));
-                    user.setLastName(resultSet.getString("lastName"));
-                    user.setAge(resultSet.getByte("age"));
+                user.setId(resultSet.getLong("id"));
+                user.setName(resultSet.getString("name"));
+                user.setLastName(resultSet.getString("lastName"));
+                user.setAge(resultSet.getByte("age"));
 
-                    userList.add(user);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+                userList.add(user);
             }
-            return userList;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //System.out.println(userList);
+        return userList;
     }
 
     public void cleanUsersTable() {
