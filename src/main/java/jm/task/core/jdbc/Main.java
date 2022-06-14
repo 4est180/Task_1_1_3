@@ -13,7 +13,9 @@ public class Main {
         userDaoJDBC.saveUser("Andrei", "Oslyabya", ((byte) 40));
 
         System.out.println(userDaoJDBC.getAllUsers().toString());
-        //userDaoJDBC.cleanUsersTable();
-        //userDaoJDBC.dropUsersTable();
+        userDaoJDBC.cleanUsersTable();
+        System.out.println(userDaoJDBC.getAllUsers().toString());
+        userDaoJDBC.dropUsersTable();
+        System.out.println(userDaoJDBC.getAllUsers().toString());
     }
 }

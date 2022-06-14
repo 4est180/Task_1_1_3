@@ -11,13 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS Users(`id` INT NOT NULL AUTO_INCREMENT,\n" +
-            "  `name` VARCHAR(45) NOT NULL,\n" +
-            "  `lastName` VARCHAR(45) NOT NULL,\n" +
-            "  `age` INT(3) NOT NULL,\n" +
-            "  PRIMARY KEY (`id`))";
+    private static final String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS Users(id INT AUTO_INCREMENT,name VARCHAR(45) NOT NULL,lastName VARCHAR(45) NOT NULL,age INT(3) NOT NULL,PRIMARY KEY (id))";
     private static final String DROP_TABLE = "DROP TABLE IF EXISTS Users";
-    private static final String SAVE_USER = "INSERT INTO Users VALUES(?,?,?,?)";
+    private static final String SAVE_USER = "INSERT INTO Users VALUES(id,?,?,?)";
     private static final String REMOVE_BY_ID = "DELETE FROM Users WHERE id=?";
     private static final String GET_ALL = "SELECT * FROM Users";
     private static final String CLEAN_TABLE = "DELETE FROM Users";
@@ -45,11 +41,9 @@ public class UserDaoJDBCImpl implements UserDao {
     public void saveUser(String name, String lastName, byte age) {
         User user = new User(name, lastName, age);
         try (PreparedStatement preparedStatement = Util.getConnection().prepareStatement(SAVE_USER)) {
-            //user.setId(((long) 1));
-            preparedStatement.setLong(1, user.getId());
-            preparedStatement.setString(2, user.getName());
-            preparedStatement.setString(3, user.getLastName());
-            preparedStatement.setByte(4, user.getAge());
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getLastName());
+            preparedStatement.setByte(3, user.getAge());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -85,7 +79,6 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        //System.out.println(userList);
         return userList;
     }
 
