@@ -8,69 +8,83 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
-    Connection connection = Util.getConnection();
 
-    public UserDaoJDBCImpl() {
+    public UserDaoJDBCImpl() throws SQLException, ClassNotFoundException {
 
     }
 
-    public void createUsersTable() throws SQLException {
+    public void createUsersTable() throws SQLException, ClassNotFoundException {
+        Connection connection = Util.getConnection();
         try (Statement statement = connection.createStatement()) {
             connection.setAutoCommit(false);
             statement.execute("CREATE TABLE IF NOT EXISTS Users(id INT AUTO_INCREMENT,name VARCHAR(45) NOT NULL,lastName VARCHAR(45) NOT NULL,age INT(3) NOT NULL,PRIMARY KEY (id))");
             connection.commit();
         } catch (Exception e) {
             e.printStackTrace();
-            connection.rollback();
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
-    public void dropUsersTable() throws SQLException {
+    public void dropUsersTable() throws SQLException, ClassNotFoundException {
+        Connection connection = Util.getConnection();
         try (Statement statement = connection.createStatement()) {
             connection.setAutoCommit(false);
             statement.execute("DROP TABLE IF EXISTS Users");
             connection.commit();
         } catch (Exception e) {
             e.printStackTrace();
-            connection.rollback();
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
-    public void saveUser(String name, String lastName, byte age) throws SQLException {
+    public void saveUser(String name, String lastName, byte age) throws SQLException, ClassNotFoundException {
+        Connection connection = Util.getConnection();
         User user = new User(name, lastName, age);
         try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO Users VALUES(id,?,?,?)")) {
             connection.setAutoCommit(false);
             preparedStatement.setString(1, user.getName());
-            connection.commit();
             preparedStatement.setString(2, user.getLastName());
-            connection.commit();
             preparedStatement.setByte(3, user.getAge());
-            connection.commit();
             preparedStatement.executeUpdate();
             connection.commit();
         } catch (Exception e) {
             e.printStackTrace();
-            connection.rollback();
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
 
-        public void removeUserById ( long id) throws SQLException {
-
+        public void removeUserById ( long id) throws SQLException, ClassNotFoundException {
+            Connection connection = Util.getConnection();
             try (PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Users WHERE id=?")) {
                 connection.setAutoCommit(false);
                 preparedStatement.setLong(1, id);
-                connection.commit();
                 preparedStatement.executeUpdate();
                 connection.commit();
             } catch (Exception e) {
                 e.printStackTrace();
-                connection.rollback();
+                try {
+                    connection.rollback();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
             }
         }
 
-    public List<User> getAllUsers() throws SQLException {
+    public List<User> getAllUsers() throws SQLException, ClassNotFoundException {
+        Connection connection = Util.getConnection();
         List<User> userList = new ArrayList<>();
-
         try (Statement statement = connection.createStatement()) {
             connection.setAutoCommit(false);
             ResultSet resultSet = statement.executeQuery("SELECT * FROM Users");
@@ -88,21 +102,29 @@ public class UserDaoJDBCImpl implements UserDao {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            connection.rollback();
+            try {
+                connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         return userList;
     }
 
-    public void cleanUsersTable() throws SQLException {
-
-            try (PreparedStatement preparedStatement = connection.prepareStatement("TRUNCATE TABLE Users")) {
-                connection.setAutoCommit(false);
-                preparedStatement.executeUpdate();
-                connection.commit();
-            } catch (Exception e) {
-                e.printStackTrace();
+    public void cleanUsersTable() throws SQLException, ClassNotFoundException {
+        Connection connection = Util.getConnection();
+        try (PreparedStatement preparedStatement = connection.prepareStatement("TRUNCATE TABLE Users")) {
+            connection.setAutoCommit(false);
+            preparedStatement.executeUpdate();
+            connection.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
                 connection.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
+        }
 
     }
 }
