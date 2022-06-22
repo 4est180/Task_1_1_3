@@ -9,7 +9,7 @@ import java.util.List;
 
 public class UserDaoJDBCImpl implements UserDao {
 
-    public UserDaoJDBCImpl() throws SQLException, ClassNotFoundException {
+    public UserDaoJDBCImpl() {
 
     }
 
@@ -26,6 +26,8 @@ public class UserDaoJDBCImpl implements UserDao {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+        }finally {
+            connection.close();
         }
     }
 
@@ -42,6 +44,8 @@ public class UserDaoJDBCImpl implements UserDao {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+        }finally {
+            connection.close();
         }
     }
 
@@ -62,6 +66,8 @@ public class UserDaoJDBCImpl implements UserDao {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+        }finally {
+            connection.close();
         }
     }
 
@@ -79,6 +85,8 @@ public class UserDaoJDBCImpl implements UserDao {
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 }
+            }finally {
+                connection.close();
             }
         }
 
@@ -107,6 +115,8 @@ public class UserDaoJDBCImpl implements UserDao {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+        } finally {
+            connection.close();
         }
         return userList;
     }
@@ -124,6 +134,8 @@ public class UserDaoJDBCImpl implements UserDao {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+        } finally {
+            connection.close();
         }
 
     }

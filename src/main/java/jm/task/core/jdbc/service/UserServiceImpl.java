@@ -10,7 +10,7 @@ public class UserServiceImpl implements UserService {
 
     UserDaoJDBCImpl userDAOService = new UserDaoJDBCImpl();
 
-    public UserServiceImpl() throws SQLException, ClassNotFoundException {
+    public UserServiceImpl() {
     }
 
     public void createUsersTable() throws SQLException, ClassNotFoundException {
